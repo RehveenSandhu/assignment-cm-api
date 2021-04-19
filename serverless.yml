@@ -1,18 +1,13 @@
+
 service: assignment-cm-api
 
-app: assignment
-frameworkVersion: '2'
+frameworkVersion: "2"
 
 provider:
   name: aws
   runtime: nodejs12.x
-  stage: ${env:STAGE}
-  region: ${env:REGION}
   environment:
-    stage: ${env:STAGE}
-    region: ${env:REGION}
     DYNAMODB_TABLE: ${self:service}-${opt:stage, self:provider.stage}
-  lambdaHashingVersion: 20201221
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -25,19 +20,17 @@ provider:
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMODB_TABLE}"
 
 functions:
-  createCustomer:
+  createUser:
     handler: scr/customer.createCustomer
-    timeout: 120
-    reservedConcurrency: 20
     events:
       - http:
-          path: customer
+          path: user
           method: post
           cors: true
-
+ 
 resources:
-  Resources:
-      CustomerDynamoDbTable:
+  Resources:    
+    UserDynamoDbTable:
       Type: "AWS::DynamoDB::Table"
       DeletionPolicy: Retain
       Properties:
