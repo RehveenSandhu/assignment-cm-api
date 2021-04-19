@@ -24,10 +24,26 @@ functions:
     handler: scr/customer.createCustomer
     events:
       - http:
-          path: user
+          path: customer
           method: post
           cors: true
- 
+  
+  geCustomer:
+    handler: scr/customer.getCustomer
+    events:
+      - http:
+          path: customer/{id}
+          method: get
+          cors: true
+
+  deleteCustomer:
+    handler: scr/customer.deleteCustomer
+    events:
+      - http:
+          path: customer/{id}
+          method: delete
+          cors: true
+
 resources:
   Resources:    
     UserDynamoDbTable:
