@@ -20,6 +20,7 @@ module.exports.createCustomer = (event, context, callback) => {
     }
   };
 
+//create customer
   dynamoDb.put(params, error => {
     if (error) {
       console.error(error);
@@ -33,6 +34,60 @@ module.exports.createCustomer = (event, context, callback) => {
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(params.Item)
+    });
+  });
+};
+
+//get customer by id
+module.exports.getCustomer = (event, context, callback) => {
+  const params = {
+    TableName: process.env.DYNAMODB_TABLE,
+    Key: {
+      id: event.pathParameters.id
+    }
+  };
+
+
+  dynamoDb.get(params, (error, result) => {
+    if (error) {
+      console.error(error);
+
+      callback(null, {
+        statusCode: error.statusCode || 501
+      });
+      return;
+    }
+
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify(result.Item)
+    });
+  });
+};
+
+
+//Delete customer by id
+module.exports.deleteCustomer = (event, context, callback) => {
+  const params = {
+    TableName: process.env.DYNAMODB_TABLE,
+    Key: {
+      id: event.pathParameters.id
+    }
+  };
+
+  dynamoDb.delete(params, error => {
+    if (error) {
+      console.error(error);
+
+      callback(null, {
+        statusCode: error.statusCode || 501
+      });
+      return;
+    }
+
+    callback(null, {
+      statusCode: 200,
+      body: JSON.stringify({})
     });
   });
 };
